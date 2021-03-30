@@ -1,14 +1,15 @@
-def is_dispalayed_hot_page():
+def test_is_dispalayed_hot_page(hot_page):
+    a = hot_page.is_displayed_pikabu_icon()
     pass
 
 
-def is_displayed_login_form():
+def test_is_displayed_login_form():
     pass
 
 
-def is_displayed_comment_day():
+def test_is_displayed_comments_day():
     pass
 
 
-def is_absent_data():
+def test_is_absent_data():
     pass
