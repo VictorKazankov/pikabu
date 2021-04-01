@@ -11,7 +11,7 @@ from pages.hot_page import HotPage
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="chrome")
+    parser.addoption("--browser", action="store", default="firefox")
     parser.addoption("--language", action="store", default="ru")
 
 
@@ -43,6 +43,7 @@ def change_browser(request):
 @pytest.fixture(scope="function")
 def browser(request):
     browser = change_browser(request)
+    browser.maximize_window()
     yield browser
     browser.quit()
 
