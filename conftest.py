@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.options import Options
 
+from pages.better_page import BetterPage
 from pages.hot_page import HotPage
 
 
@@ -11,7 +12,7 @@ from pages.hot_page import HotPage
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--language", action="store", default="ru")
 
 
@@ -54,3 +55,11 @@ def hot_page(browser):
     home_page = HotPage(browser, home_page_url)
     home_page.open()
     return home_page
+
+
+@pytest.fixture()
+def better_page(browser, hot_page):
+    hot_page.open_better_page()
+    better_page = BetterPage(browser, browser.current_url)
+    better_page.open()
+    return better_page

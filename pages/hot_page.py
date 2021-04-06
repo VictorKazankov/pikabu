@@ -1,10 +1,15 @@
 from time import sleep
+from datetime import datetime
 
 from pages.basepage import BasePage
 from pages.locators import GeneralLocators
 
 
 class HotPage(BasePage):
+    
+    from_data = '01/02/2021'
+    to_data = '10/02/2021'
+
     def open(self):
         self.browser.get(self.url)
         assert "Горячее" in self.browser.title
@@ -25,3 +30,47 @@ class HotPage(BasePage):
 
     def is_displayed_choose_data_element(self):
         return self.get_element_present(*GeneralLocators.CHOOSE_DATA)
+
+    def open_better_page(self):
+        better_tab = self.get_element_present(*GeneralLocators.BETTER_TAB_LINK)
+        better_tab.click()
+
+    def hover_to_change_data_label(self):
+        self.hover(*GeneralLocators.CHOOSE_DATA)
+
+    def is_displayed_calendar(self):
+        assert self.get_element_present(*GeneralLocators.CALENDAR_OVERLAY)
+
+    def set_up_data_in_calendat(self):
+        self.hover(*GeneralLocators.CALENDAR_OVERLAY)
+        data_from_and_to_list = self.get_elements_present(*GeneralLocators.DATA_FROM_AND_TO_LIST)
+        self.set_data_from_and_to_fields_calendar(data_from_and_to_list, self.from_data, self.to_data)
+
+    def is_displayed_show_posts_button(self):
+        success_button = self.get_element_present(*GeneralLocators.SUCCESS_BUTTON)
+        assert success_button
+        return success_button
+
+    def click_show_posts_button(self, success_button):
+        success_button.click()
+        pass
+
+    def posts_should_display_for_certain_date(self):
+        date_list_sorter = self.get_date_list_sorted_from_posts()
+
+        # verify that data last post(top post) = latest choose date in calendar
+        data_last_post = datetime.strptime(date_list_sorter[0], '%Y-%m-%d').strftime('%d-%m-%Y')
+        data_end = datetime.strptime(self.to_data, '%d/%m/%Y').strftime('%d-%m-%Y')
+        assert data_last_post == data_end
+
+        # verify that data first post(bottom post) = first choose date in calendar
+        data_first_post = datetime.strptime(date_list_sorter[-1], '%Y-%m-%d').strftime('%d-%m-%Y')
+        data_first = datetime.strptime(self.from_data, '%d/%m/%Y').strftime('%d-%m-%Y')
+        assert data_first_post == data_first
+
+    def get_date_list_sorted_from_posts(self):
+        hint_object_list = self.get_elements_present(*GeneralLocators.HINT_DATA_LIST)
+        # get attribute from time hint and cuts time
+        data_list = [data.get_attribute("datetime")[:-15] for data in hint_object_list]
+        data_list_sorted = sorted(data_list, reverse=True)
+        return data_list_sorted
