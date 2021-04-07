@@ -37,3 +37,14 @@ def test_present_posts_for_certain_date(hot_page):
     success_button = hot_page.is_displayed_show_posts_button()
     hot_page.click_show_posts_button(success_button)
     hot_page.posts_should_display_for_certain_date()
+
+
+def test_is_displayed_show_in_viewed_posts(hot_page):
+    hot_page.open_filter_popup()
+    hot_page.is_displayed_show_text()
+
+
+def test_is_displayed_view_type(hot_page):
+    hot_page.open_filter_popup()
+    hot_page.open_view_type_list()
+    hot_page.all_types_should_be_displayed()

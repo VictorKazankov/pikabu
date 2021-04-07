@@ -13,3 +13,6 @@ class GeneralLocators():
     DATA_FROM_AND_TO_LIST = (By.XPATH, "//input[@placeholder='ДД/ММ/ГГГГ']")
     SUCCESS_BUTTON = (By.XPATH, "//button[contains(text(),'Показать посты')]")
     HINT_DATA_LIST = (By.XPATH, "//time[@class='caption story__datetime hint']")
+    SHOW_TEXT = (By.XPATH, "//select[@name='displayMode']/option[1]")
+    DISPLAY_MODE_SELECT = (By.XPATH, "//select[@name='displayMode']")
+    DISPLAY_MODE_TYPES = (By.XPATH, "//select[@name='displayMode']/descendant::*")

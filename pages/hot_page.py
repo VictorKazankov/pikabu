@@ -6,7 +6,7 @@ from pages.locators import GeneralLocators
 
 
 class HotPage(BasePage):
-    
+
     from_data = '01/02/2021'
     to_data = '10/02/2021'
 
@@ -74,3 +74,18 @@ class HotPage(BasePage):
         data_list = [data.get_attribute("datetime")[:-15] for data in hint_object_list]
         data_list_sorted = sorted(data_list, reverse=True)
         return data_list_sorted
+
+    def is_displayed_show_text(self):
+        text_element = self.get_element_present(*GeneralLocators.SHOW_TEXT)
+        b = text_element.text
+        assert text_element.text == 'показывать'
+
+    def open_view_type_list(self):
+        display_mode = self.get_element_present(*GeneralLocators.DISPLAY_MODE_SELECT)
+        display_mode.click()
+
+    def all_types_should_be_displayed(self):
+        type_objects = self.get_elements_present(*GeneralLocators.DISPLAY_MODE_TYPES)
+        types_text = list(map(lambda i: i.text, type_objects))
+        correct_types_text = ['показывать', 'сворачивать', 'скрывать']
+        assert correct_types_text == types_text
