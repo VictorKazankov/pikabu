@@ -48,3 +48,13 @@ def test_is_displayed_view_type(hot_page):
     hot_page.open_filter_popup()
     hot_page.open_view_type_list()
     hot_page.all_types_should_be_displayed()
+
+
+def test_open_three_articles_in_new_separate_tabs(hot_page):
+    url_article_list = hot_page.get_list_url_for_all_articles()
+    # open 3 top article in new tabs
+    hot_page.open_article_to_new_tab(url_article_list[0])
+    hot_page.open_article_to_new_tab(url_article_list[1])
+    hot_page.open_article_to_new_tab(url_article_list[2])
+    hot_page.all_new_tabs_should_be_opened()
+    pass

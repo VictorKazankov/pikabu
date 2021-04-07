@@ -40,7 +40,6 @@ def change_browser(request):
         raise ValueError("Unrecognized browser {}".format(browser_name))
     return br
 
-
 @pytest.fixture(scope="function")
 def browser(request):
     browser = change_browser(request)

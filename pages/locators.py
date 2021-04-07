@@ -16,3 +16,4 @@ class GeneralLocators():
     SHOW_TEXT = (By.XPATH, "//select[@name='displayMode']/option[1]")
     DISPLAY_MODE_SELECT = (By.XPATH, "//select[@name='displayMode']")
     DISPLAY_MODE_TYPES = (By.XPATH, "//select[@name='displayMode']/descendant::*")
+    ARTICLES_LIST = (By.XPATH, "//h2[@class='story__title']/a")

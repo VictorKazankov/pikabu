@@ -6,7 +6,6 @@ from pages.locators import GeneralLocators
 
 
 class HotPage(BasePage):
-
     from_data = '01/02/2021'
     to_data = '10/02/2021'
 
@@ -89,3 +88,15 @@ class HotPage(BasePage):
         types_text = list(map(lambda i: i.text, type_objects))
         correct_types_text = ['показывать', 'сворачивать', 'скрывать']
         assert correct_types_text == types_text
+
+    def get_list_url_for_all_articles(self):
+        articles_list = self.get_elements_present(*GeneralLocators.ARTICLES_LIST)
+        url_articles_list = list(map(lambda i: i.get_attribute("href"), articles_list))
+        return url_articles_list
+
+    def open_article_to_new_tab(self, url):
+        self.browser.execute_script(f"window.open('{url}','_blank');")
+
+    def all_new_tabs_should_be_opened(self):
+        # count tab = 4(1+3)
+        assert len(self.browser.window_handles) == 4
