@@ -12,7 +12,7 @@ from pages.hot_page import HotPage
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="chrome")
+    parser.addoption("--browser", action="store", default="firefox")
     parser.addoption("--language", action="store", default="ru")
 
 
@@ -40,7 +40,8 @@ def change_browser(request):
         raise ValueError("Unrecognized browser {}".format(browser_name))
     return br
 
-@pytest.fixture(scope="function")
+
+@pytest.fixture(scope="session")
 def browser(request):
     browser = change_browser(request)
     browser.maximize_window()
@@ -48,12 +49,12 @@ def browser(request):
     browser.quit()
 
 
-@pytest.fixture()
-def hot_page(browser):
-    home_page_url = "https://pikabu.ru/"
-    home_page = HotPage(browser, home_page_url)
-    home_page.open()
-    return home_page
+# @pytest.fixture()
+# def hot_page(browser):
+#     home_page_url = "https://pikabu.ru/"
+#     home_page = HotPage(browser, home_page_url)
+#     home_page.open()
+#     return home_page
 
 
 @pytest.fixture()

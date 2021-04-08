@@ -76,7 +76,6 @@ class HotPage(BasePage):
 
     def is_displayed_show_text(self):
         text_element = self.get_element_present(*GeneralLocators.SHOW_TEXT)
-        b = text_element.text
         assert text_element.text == 'показывать'
 
     def open_view_type_list(self):
@@ -94,9 +93,27 @@ class HotPage(BasePage):
         url_articles_list = list(map(lambda i: i.get_attribute("href"), articles_list))
         return url_articles_list
 
-    def open_article_to_new_tab(self, url):
+    def open_post_to_new_tab(self, url):
         self.browser.execute_script(f"window.open('{url}','_blank');")
 
     def all_new_tabs_should_be_opened(self):
         # count tab = 4(1+3)
         assert len(self.browser.window_handles) == 4
+
+    def posts_should_be_with_preview(self):
+        self.browser.switch_to.window(self.browser.window_handles[0])
+        self.browser.refresh()
+        articles_content_list = self.get_elements_present(*GeneralLocators.ARTICLES_CONTENT_LIST)
+        # verify that count articles with preview = 10
+        assert len(articles_content_list) == 10
+
+    def change_fold_type_in_view_panel(self):
+        self.open_filter_popup()
+        self.open_view_type_list()
+        fold_text = self.get_element_present(*GeneralLocators.FOLD_TEXT)
+        fold_text.click()
+
+    def three_posts_should_be_folded(self):
+        articles_content_list = self.get_elements_present(*GeneralLocators.ARTICLES_CONTENT_LIST)
+        # verify that count articles with preview = 7, 3 articles - folded
+        assert len(articles_content_list) == 7
