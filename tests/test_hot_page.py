@@ -23,29 +23,40 @@ class TestGeneralHotPage:
         hot_page.open_filter_popup()
         assert hot_page.is_displayed_choose_data_element()
 
-    # class TestFilterPosts:
-    # def test_opening_calendar(hot_page):
-    #     hot_page.open_filter_popup()
-    #     hot_page.hover_to_change_data_label()
-    #     hot_page.is_displayed_calendar()
-    #
-    # def test_posts_sorted_by_desc(hot_page):
-    #     hot_page.open_filter_popup()
-    #     hot_page.hover_to_change_data_label()
-    #     hot_page.set_up_data_in_calendat()
-    #     success_button = hot_page.is_displayed_show_posts_button()
-    #     hot_page.click_show_posts_button(success_button)
-    #     # hot_page.is_displayed_download_animation()
-    #     rating_list = hot_page.get_values_rating()
-    #     hot_page.post_should_be_sorted_desc(rating_list)
-    #
-    # def test_present_posts_for_certain_date(hot_page):
-    #     hot_page.open_filter_popup()
-    #     hot_page.hover_to_change_data_label()
-    #     hot_page.set_up_data_in_calendat()
-    #     success_button = hot_page.is_displayed_show_posts_button()
-    #     hot_page.click_show_posts_button(success_button)
-    #     hot_page.posts_should_display_for_certain_date()
+
+class TestFilterPosts:
+    # @pytest.fixture(scope="class", autouse=True)
+    # def setup(self, browser):
+    #     hot_page = HotPage(browser, hot_page_url)
+    #     hot_page.open()
+    #     return hot_page
+
+    def test_opening_calendar(self, browser):
+        hot_page = HotPage(browser, hot_page_url)
+        hot_page.open_filter_popup()
+        hot_page.hover_to_change_data_label()
+        hot_page.is_displayed_calendar()
+
+    def test_posts_sorted_by_desc(self, browser):
+        hot_page = HotPage(browser, hot_page_url)
+        hot_page.open_filter_popup()
+        hot_page.hover_to_change_data_label()
+        hot_page.set_up_data_in_calendat()
+        success_button = hot_page.is_displayed_show_posts_button()
+        hot_page.click_show_posts_button(success_button)
+        # hot_page.is_displayed_download_animation()
+        rating_list = hot_page.get_values_rating()
+        hot_page.post_should_be_sorted_desc(rating_list)
+
+    def test_present_posts_for_certain_date(self, browser):
+        hot_page = HotPage(browser, hot_page_url)
+        hot_page.open_filter_popup()
+        hot_page.hover_to_change_data_label()
+        hot_page.set_up_data_in_calendat()
+        success_button = hot_page.is_displayed_show_posts_button()
+        hot_page.click_show_posts_button(success_button)
+        hot_page.posts_should_display_for_certain_date()
+
     #
     # # class TestFoldPosts:
     # def test_is_displayed_show_in_viewed_posts(hot_page):
