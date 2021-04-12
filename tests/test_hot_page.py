@@ -2,49 +2,35 @@ import pytest
 
 from pages.hot_page import HotPage
 
-hot_page_url = "https://pikabu.ru/"
-
-
-@pytest.fixture(scope="function", autouse=True)
-def setup_class(browser):
-    hot_page = HotPage(browser, hot_page_url)
-    hot_page.open()
-    return hot_page
-
 
 class TestGeneralHotPage:
-    def test_is_dispalayed_icon_login_comments_elements(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_is_dispalayed_icon_login_comments_elements(self, hot_page):
         assert hot_page.is_displayed_pikabu_icon()
         assert hot_page.is_displayed_login_form()
         assert hot_page.is_displayed_comments_day()
 
-    def test_is_absent_data(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_is_absent_data(self, hot_page):
         hot_page.open_filter_popup()
         assert hot_page.is_displayed_choose_data_element()
 
 
 class TestFilterPosts:
-    def test_opening_calendar(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_opening_calendar(self, hot_page):
         hot_page.open_filter_popup()
         hot_page.hover_to_change_data_label()
         hot_page.is_displayed_calendar()
 
-    def test_posts_sorted_by_desc(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_posts_sorted_by_desc(self, hot_page):
         hot_page.open_filter_popup()
         hot_page.hover_to_change_data_label()
         hot_page.set_up_data_in_calendat()
         success_button = hot_page.is_displayed_show_posts_button()
         hot_page.click_show_posts_button(success_button)
-        # hot_page.is_displayed_download_animation()
+        hot_page.is_displayed_download_animation()
         rating_list = hot_page.get_values_rating()
         hot_page.post_should_be_sorted_desc(rating_list)
 
-    def test_present_posts_for_certain_date(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_present_posts_for_certain_date(self, hot_page):
         hot_page.open_filter_popup()
         hot_page.hover_to_change_data_label()
         hot_page.set_up_data_in_calendat()
@@ -54,20 +40,17 @@ class TestFilterPosts:
 
 
 class TestFoldPosts:
-    def test_is_displayed_show_in_viewed_posts(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_is_displayed_show_in_viewed_posts(self, hot_page):
         hot_page.open_filter_popup()
         hot_page.is_displayed_show_text()
 
-    def test_is_displayed_view_type(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_is_displayed_view_type(self, hot_page):
         hot_page.open_filter_popup()
         hot_page.open_view_type_list()
         hot_page.all_types_should_be_displayed()
 
     @pytest.mark.xfail(reason="Posts aren't folded, after opening them in new tabs")
-    def test_open_three_posts_in_new_separate_tabs(self, browser):
-        hot_page = HotPage(browser, hot_page_url)
+    def test_open_three_posts_in_new_separate_tabs(self, hot_page):
         url_posts_list = hot_page.get_list_url_for_all_articles()
         # open 3 top posts in new tabs
         hot_page.open_post_to_new_tab(url_posts_list[0])
