@@ -117,3 +117,12 @@ class HotPage(BasePage):
         articles_content_list = self.get_elements_present(*GeneralLocators.ARTICLES_CONTENT_LIST)
         # verify that count articles with preview = 7, 3 articles - folded
         assert len(articles_content_list) == 7
+
+    def is_displayed_download_animation(self):
+        image_animation = self.get_element_present(*GeneralLocators.IMAGE_ANIMATION)
+        if image_animation:
+            assert image_animation
+        else:
+            self.open_filter_popup()
+            self.get_element_present(*GeneralLocators.ALL_TIME_RADIO_BUTTON).click()
+            assert self.get_element_present(*GeneralLocators.IMAGE_ANIMATION)

@@ -19,3 +19,6 @@ class GeneralLocators():
     ARTICLES_LIST = (By.XPATH, "//h2[@class='story__title']/a")
     ARTICLES_CONTENT_LIST = (By.XPATH, "//article/*/div[@class='story__content story__typography']")
     FOLD_TEXT = (By.XPATH, "//select[@name='displayMode']/option[2]")
+    IMAGE_ANIMATION = (
+        By.XPATH, "//main/div/div[3]/div/div")
+    ALL_TIME_RADIO_BUTTON = (By.XPATH, "//span[contains(text(),'За всё время')]")

@@ -8,9 +8,6 @@ from pages.better_page import BetterPage
 from pages.hot_page import HotPage
 
 
-# from pages.search_page import SearchPage
-
-
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="firefox")
     parser.addoption("--language", action="store", default="ru")
@@ -49,15 +46,14 @@ def browser(request):
     browser.quit()
 
 
-# @pytest.fixture()
-# def hot_page(browser):
-#     home_page_url = "https://pikabu.ru/"
-#     home_page = HotPage(browser, home_page_url)
-#     home_page.open()
-#     return home_page
+@pytest.fixture(scope="function", autouse=True)
+def hot_page(browser):
+    hot_page = HotPage(browser, "https://pikabu.ru/")
+    hot_page.open()
+    return hot_page
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function", autouse=True)
 def better_page(browser, hot_page):
     hot_page.open_better_page()
     better_page = BetterPage(browser, browser.current_url)
