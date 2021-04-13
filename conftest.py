@@ -1,3 +1,5 @@
+from threading import Thread
+
 import pytest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,43 +9,47 @@ from selenium.webdriver.chrome.options import Options
 from pages.better_page import BetterPage
 from pages.hot_page import HotPage
 
+# This array 'caps' defines the capabilities browser, device and OS combinations where the test will run
 
-def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
-    parser.addoption("--language", action="store", default="ru")
-
-
-def get_language_local_chrome(request):
-    local = request.config.getoption("--language")
-    options = Options()
-    options.add_experimental_option('prefs', {'intl.accept_languages': local})
-    return options
-
-
-def get_language_local_firefox(request):
-    local = request.config.getoption("--language")
-    fp = webdriver.FirefoxProfile()
-    fp.set_preference("intl.accept_languages", local)
-    return fp
+caps = [{
+    'os_version': '10',
+    'os': 'Windows',
+    'browser': 'chrome',
+    'browser_version': 'latest',
+    'name': 'Test Chrome',  # test name
+    'build': 'Build 1'  # Your tests will be organized within this build
+},
+    {
+        'os_version': '10',
+        'os': 'Windows',
+        'browser': 'firefox',
+        'browser_version': 'latest',
+        'name': 'Test Firefox',
+        'build': 'Build 1'
+    },
+    {
+        'os_version': '10',
+        'os': 'Windows',
+        'browser': 'edge',
+        'browser_version': '89.0',
+        'name': 'Test Edge',
+        'build': 'Build 1'
+    }]
 
 
 def change_browser(request):
-    browser_name = request.config.getoption("--browser")
-    if browser_name == "chrome":
-        br = webdriver.Chrome(ChromeDriverManager().install())
-    elif browser_name == "firefox":
-        br = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-    else:
-        raise ValueError("Unrecognized browser {}".format(browser_name))
-    return br
+    driver = webdriver.Remote(
+        command_executor='https://victorkazankov1:Sxkc4wihaD9ifsbT2zo9@hub-cloud.browserstack.com/wd/hub',
+        desired_capabilities=request)
+    return driver
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", params=caps, ids=["chrome", "firefox", "edge"])
 def browser(request):
-    browser = change_browser(request)
-    browser.maximize_window()
-    yield browser
-    browser.quit()
+    driver = change_browser(request.param)
+    driver.maximize_window()
+    yield driver
+    driver.quit()
 
 
 @pytest.fixture(scope="function", autouse=True)
