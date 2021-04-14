@@ -59,7 +59,7 @@ def hot_page(browser):
     return hot_page
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="function")
 def better_page(browser, hot_page):
     hot_page.open_better_page()
     better_page = BetterPage(browser, browser.current_url)
