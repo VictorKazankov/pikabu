@@ -9,7 +9,7 @@ from pages.hot_page import HotPage
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--language", action="store", default="ru")
 
 
@@ -27,23 +27,44 @@ def get_language_local_firefox(request):
     return fp
 
 
+caps = [{
+  'browserName': 'chrome',
+  'browserVersion': '90.0',
+  'platformName': 'Windows 10',
+  'sauce:options': {
+      'screenResolution': '1920x1200'
+  }
+}, {
+  'browserName': 'firefox',
+  'browserVersion': '88.0',
+  'platformName': 'Windows 10',
+  'sauce:options': {
+      'screenResolution': '1920x1200'
+  }
+}, {
+  'browserName': 'MicrosoftEdge',
+  'browserVersion': '90.0',
+  'platformName': 'Windows 10',
+  'sauce:options': {
+      'screenResolution': '1920x1200'
+  }
+}
+]
+
+
 def change_browser(request):
-    browser_name = request.config.getoption("--browser")
-    if browser_name == "chrome":
-        br = webdriver.Chrome(ChromeDriverManager().install())
-    elif browser_name == "firefox":
-        br = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-    else:
-        raise ValueError("Unrecognized browser {}".format(browser_name))
-    return br
+    driver = webdriver.Remote(
+        command_executor='https://vicprog:63733e7f-b4b3-4c26-9436-f91e0862031a@ondemand.eu-central-1.saucelabs.com:443/wd/hub',
+        desired_capabilities=request)
+    return driver
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", params=caps, ids=["chrome", "firefox", "edge"])
 def browser(request):
-    browser = change_browser(request)
-    browser.maximize_window()
-    yield browser
-    browser.quit()
+    driver = change_browser(request.param)
+    driver.maximize_window()
+    yield driver
+    driver.quit()
 
 
 @pytest.fixture(scope="function", autouse=True)
